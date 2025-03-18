@@ -1,11 +1,11 @@
 package com.example.battle_coding.service;
 
 import com.example.battle_coding.dto.SignupRequestDto;
+import com.example.battle_coding.entity.User;
 import com.example.battle_coding.repository.UserRepository;
 import com.example.battle_coding.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +17,28 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public String signup(SignupRequestDto request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+
+        validateEmailDuplicate(request.email());
+
+        String encodedPassword = passwordEncoder.encode(request.password());
+
+        User user = User.builder()
+                .email(request.email())
+                .password(encodedPassword)
+                .provider(request.provider())
+                .providerId(request.providerId())
+                .build();
+
+        userRepository.save(user);
+        return "회원가입 성공!!";
+
+    }
+
+    private void validateEmailDuplicate(String email) {
+        if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
     }
+
+
 }
