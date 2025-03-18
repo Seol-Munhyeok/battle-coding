@@ -1,5 +1,6 @@
 package com.example.battle_coding.service;
 
+import com.example.battle_coding.dto.LoginRequestDto;
 import com.example.battle_coding.dto.SignupRequestDto;
 import com.example.battle_coding.entity.User;
 import com.example.battle_coding.repository.UserRepository;
@@ -31,7 +32,22 @@ public class AuthService {
 
         userRepository.save(user);
         return "회원가입 성공!!";
+    }
 
+    public String login(LoginRequestDto request) {
+        User user = validateUserCredentials(request.email(), request.password());
+        return jwtTokenProvider.createAccessToken(user.getEmail());
+    }
+
+    private User validateUserCredentials(String email, String rawPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return user;
     }
 
     private void validateEmailDuplicate(String email) {
