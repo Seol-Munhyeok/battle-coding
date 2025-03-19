@@ -3,7 +3,7 @@ server:
 
 spring:
   config:
-    import: application-secret.yml
+    import: ../../application-secret.yml
   datasource:
     url: jdbc:mysql://localhost:3306/codingbattle?serverTimezone=UTC&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
