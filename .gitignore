@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-D:\battle-coding\backend\src\application-secret.yml
+src/application-secret.yml
 
 ### STS ###
 .apt_generated
@@ -56,9 +56,7 @@ yarn.lock
 .env.production.local
 
 # IDE 및 에디터 관련 파일
-.vscode/
 .idea/
-*.iml
 
 # OS 관련 파일
 .DS_Store
