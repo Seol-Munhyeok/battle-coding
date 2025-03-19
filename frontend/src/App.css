@@ -1,38 +1,21 @@
-.App {
-  text-align: center;
+body{
+  height: 100vh;  /* 전체 화면 높이를 설정 */
+  background: 
+    radial-gradient(circle farthest-corner at top left, #292637, transparent), /* 왼쪽 상단 */
+    radial-gradient(circle farthest-corner at top right, #393B4B, transparent), /* 오른쪽 상단 */
+    radial-gradient(circle farthest-corner at bottom left, #211E2F, transparent), /* 왼쪽 하단 */
+    radial-gradient(circle farthest-corner at bottom right, #282838, transparent); /* 오른쪽 하단 */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#logo-container{
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  height:100vh;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#logo-image {
+  width: 350px;
+  height: auto;
+  transform: translateY(-70px);
 }
