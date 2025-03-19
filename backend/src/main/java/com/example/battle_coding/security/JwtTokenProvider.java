@@ -58,3 +58,12 @@ public class JwtTokenProvider {
         }
     }
 }
+private final Set<String> invalidatedTokens = ConcurrentHashMap.newKeySet();
+
+public void invalidateToken(String token) {
+    invalidatedTokens.add(token);
+}
+
+public boolean isTokenValid(String token) {
+    return !invalidatedTokens.contains(token) && validateToken(token);
+}
