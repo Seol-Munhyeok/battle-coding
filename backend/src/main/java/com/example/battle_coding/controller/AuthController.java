@@ -27,3 +27,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 }
+@PostMapping("/logout")
+public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    HttpSession session = request.getSession(false);
+    if (session != null) {
+        session.invalidate();
+    }
+    return ResponseEntity.ok("로그아웃 성공");
+}

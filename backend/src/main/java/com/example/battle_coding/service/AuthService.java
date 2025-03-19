@@ -58,3 +58,6 @@ public class AuthService {
 
 
 }
+public void logout(String token) {
+    jwtTokenProvider.invalidateToken(token);
+}
