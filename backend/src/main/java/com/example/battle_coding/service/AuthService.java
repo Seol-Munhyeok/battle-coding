@@ -2,6 +2,7 @@ package com.example.battle_coding.service;
 
 import com.example.battle_coding.dto.LoginRequestDto;
 import com.example.battle_coding.dto.SignupRequestDto;
+import com.example.battle_coding.entity.LoginProvider;
 import com.example.battle_coding.entity.User;
 import com.example.battle_coding.repository.UserRepository;
 import com.example.battle_coding.security.JwtTokenProvider;
@@ -45,8 +46,10 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        if (user.getProvider() == LoginProvider.LOCAL) {
+            if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            }
         }
 
         return user;
