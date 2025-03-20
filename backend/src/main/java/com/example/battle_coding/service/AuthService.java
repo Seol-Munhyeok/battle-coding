@@ -20,6 +20,7 @@ public class AuthService {
     public String signup(SignupRequestDto request) {
 
         validateEmailDuplicate(request.email());
+        validateProviderIdDuplicate(request.providerId());
 
         String encodedPassword = passwordEncoder.encode(request.password());
 
@@ -54,6 +55,12 @@ public class AuthService {
     private void validateEmailDuplicate(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+    }
+
+    private void validateProviderIdDuplicate(String providerId) {
+        if (userRepository.findByProviderId(providerId).isPresent()) {
+            throw new IllegalArgumentException("이미 가입된 소셜 로그인 계정입니다.");
         }
     }
 
