@@ -1,7 +1,8 @@
 package com.example.battle_coding.service;
 
-import com.example.battle_coding.dto.LoginRequestDto;
-import com.example.battle_coding.dto.SignupRequestDto;
+import com.example.battle_coding.dto.request.LoginRequestDto;
+import com.example.battle_coding.dto.request.SignupRequestDto;
+import com.example.battle_coding.dto.response.SignupResponseDto;
 import com.example.battle_coding.entity.LoginProvider;
 import com.example.battle_coding.entity.User;
 import com.example.battle_coding.repository.UserRepository;
@@ -18,23 +19,26 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public String signup(SignupRequestDto request) {
+    public SignupResponseDto signup(SignupRequestDto request) {
+        try {
+            validateEmailDuplicate(request.email());
+            validateProviderIdDuplicate(request.providerId());
 
-        validateEmailDuplicate(request.email());
-        validateProviderIdDuplicate(request.providerId());
+            String encodedPassword = passwordEncoder.encode(request.password());
 
-        String encodedPassword = passwordEncoder.encode(request.password());
+            User user = User.builder()
+                    .email(request.email())
+                    .password(encodedPassword)
+                    .nickname(request.nickname())
+                    .provider(request.provider())
+                    .providerId(request.providerId())
+                    .build();
 
-        User user = User.builder()
-                .email(request.email())
-                .password(encodedPassword)
-                .nickname(request.nickname())
-                .provider(request.provider())
-                .providerId(request.providerId())
-                .build();
-
-        userRepository.save(user);
-        return "회원가입 성공!!";
+            userRepository.save(user);
+            return new SignupResponseDto(true, "회원가입 성공!");
+        } catch (IllegalArgumentException e) {
+            return new SignupResponseDto(false, e.getMessage());
+        }
     }
 
     public String login(LoginRequestDto request) {
