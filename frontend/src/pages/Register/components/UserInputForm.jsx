@@ -46,7 +46,7 @@ const UserInputForm = () => {
     return (
         <form className="regsiterSubmitForm" onSubmit={submitHandler}>
             <InputInfo onChange={infoHandler} OnChangeValidation={validationHandler} />
-            <button disabled={!isValidButton}  onClick={() => console.log("회원가입 버튼 클릭됨, 상태: ", info)}>회원가입</button>
+            <button disabled={!isValidButton}>회원가입</button>
         </form>
     );
 };
