@@ -26,6 +26,7 @@ public class AuthService {
         User user = User.builder()
                 .email(request.email())
                 .password(encodedPassword)
+                .nickname(request.nickname())
                 .provider(request.provider())
                 .providerId(request.providerId())
                 .build();
