@@ -16,6 +16,13 @@ const InputInfo = ({ onChange, OnChangeValidation }) => {
         passwordCheck: false,
     });
 
+    useEffect(() => {
+        setIsValid((prev) => ({
+            ...prev,
+            passwordCheck: inputData.passwordCheck.length > 0 && inputData.password === inputData.passwordCheck,
+        }));
+    }, [inputData.password, inputData.passwordCheck]);
+
     const inputHandler = (event) => {
         const { name, value } = event.target;
 
@@ -27,25 +34,34 @@ const InputInfo = ({ onChange, OnChangeValidation }) => {
             isValidValue = value.length >= 4 && value.length <= 12;
             setIsValid((prev) => ({ ...prev, nickname: isValidValue }));
         }
+
         if (name === "email") {
             isValidValue = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
             setIsValid((prev) => ({ ...prev, email: isValidValue }));
         }
+
         if (name === "password") {
             isValidValue = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,16}$/.test(value);
             setIsValid((prev) => ({
                 ...prev,
                 password: isValidValue,
-                passwordCheck: inputData.passwordCheck === value,
             }));
         }
+
         if (name === "passwordCheck") {
             isValidValue = inputData.password === value;
             setIsValid((prev) => ({ ...prev, passwordCheck: isValidValue }));
         }
+
+        const validationMapping = {
+            nickname: "isValidNickname",
+            email: "isValidEmail",
+            password: "isValidPwd",
+            passwordCheck: "isValidPwdChk",
+        };
     
         onChange(name, value);
-        OnChangeValidation(`isValid${name.charAt(0).toUpperCase() + name.slice(1)}`, isValidValue);
+        OnChangeValidation(validationMapping[name], isValidValue);
     };
 
     return (
@@ -72,7 +88,9 @@ const InputInfo = ({ onChange, OnChangeValidation }) => {
             )}
 
             <input {...INPUT_FIELDS[3]} value={inputData.passwordCheck} onChange={inputHandler} />
-            {isValid.passwordCheck && <p className="valid">비밀번호가 일치합니다.</p>}
+            {inputData.passwordCheck.length > 0 && isValid.passwordCheck && (
+                <p className="valid">비밀번호가 일치합니다.</p>
+            )}
             {!isValid.passwordCheck && inputData.passwordCheck && (
                 <p className="invalid">비밀번호를 한 번 더 입력해 주세요.</p>
             )}
